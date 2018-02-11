@@ -8,6 +8,7 @@ namespace NetSolutionWorkSample.Entity
 {
     public class Movie
     {
+        public string ID { get; set; }
         public string Title { get; set; }
         public double Popularity { get; set; }
         public string Overview { get; set; }

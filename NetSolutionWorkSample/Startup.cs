@@ -34,8 +34,6 @@ namespace NetSolutionWorkSample
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
 
-            var myConfig = Configuration["TheMovieDB"];
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

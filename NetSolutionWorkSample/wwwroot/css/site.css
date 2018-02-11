@@ -104,3 +104,7 @@ input[type=text] {
     margin-left: auto;
     margin-right: auto;
 }
+
+.sorterWrapper {
+    padding-bottom: 15px;
+}

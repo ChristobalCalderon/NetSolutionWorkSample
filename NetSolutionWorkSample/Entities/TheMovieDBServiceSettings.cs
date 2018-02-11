@@ -13,6 +13,7 @@ namespace NetSolutionWorkSample.Entities
         public string Upcoming_Uri { get; set; }
         public string Search_Movie_Uri { get; set; }
         public string Search_Movie_Uri_End { get; set; }
+        public string Movie_Details_Uri { get; set; }
         public string ApiKey { get; set; }
 
     }
