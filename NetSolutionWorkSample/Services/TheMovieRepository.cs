@@ -15,10 +15,31 @@ namespace NetSolutionWorkSample.Services
 
         public async Task<MoviePage> TopRatedMovies(int page)
         {
+            return await client(Movie.TopRated_Uri + page);
+        }
+
+        public async Task<MoviePage> PopularMovies(int page)
+        {
+            return await client(Movie.Popular_Uri + page);
+        }
+
+        public async Task<MoviePage> UpcomingMovies(int page)
+        {
+            return await client(Movie.Upcoming_Uri + page);
+        }
+
+        public async Task<MoviePage> SearchMovieByName(string searchName)
+        {
+            return await client(Movie.Search_Movie_Uri(HttpUtility.UrlEncode(searchName)));
+        }
+
+
+        private static async Task<MoviePage> client(string clientUri)
+        {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(Movie.Base_Uri);
-                var response = await client.GetAsync(Movie.TopRated_Uri + page);
+                var response = await client.GetAsync(clientUri);
                 response.EnsureSuccessStatusCode();
 
                 var stringResult = await response.Content.ReadAsStringAsync();
@@ -27,19 +48,5 @@ namespace NetSolutionWorkSample.Services
             }
         }
 
-        public async Task<MoviePage> SearchMovieByName(string searchName)
-        {
-            using (var client = new HttpClient())
-            {
-                    client.BaseAddress = new Uri(Movie.Base_Uri);
-                    var searchNameEncoded = HttpUtility.UrlEncode(searchName);
-                    var response = await client.GetAsync(Movie.Search_Movie_Uri(searchNameEncoded));
-                    response.EnsureSuccessStatusCode();
-
-                    var stringResult = await response.Content.ReadAsStringAsync();
-                    var rawMovie = JsonConvert.DeserializeObject<MoviePage>(stringResult);
-                    return rawMovie;
-            }
-        }
     }
 }

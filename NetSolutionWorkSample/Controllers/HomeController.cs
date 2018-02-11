@@ -28,25 +28,33 @@ namespace NetSolutionWorkSample.Controllers
 
         public async Task<IActionResult> TopRatedMovies(int page)
         {
-            try
-            {
-                return Ok(await _theMovieRepository.TopRatedMovies(page));
-            }
-            catch (HttpRequestException httpRequestException)
-            {
-                return BadRequest($"Error getting movies from Themoviedb: {httpRequestException.Message}");
-            }
+            return await clientRepsone(_theMovieRepository.TopRatedMovies(page));
+        }
+
+        public async Task<IActionResult> PopularMovies(int page)
+        {
+            return await clientRepsone(_theMovieRepository.PopularMovies(page));
+        }
+
+        public async Task<IActionResult> UpcomingMovies(int page)
+        {
+            return await clientRepsone(_theMovieRepository.UpcomingMovies(page));
         }
 
         public async Task<IActionResult> SearchMovieByName(string searchName)
         {
+            return await clientRepsone(_theMovieRepository.SearchMovieByName(searchName));
+        }
+
+        private async Task<IActionResult> clientRepsone(Task<MoviePage> client)
+        {
             try
             {
-                return Ok(await _theMovieRepository.SearchMovieByName(searchName));
+                return Ok(await client);
             }
             catch (HttpRequestException httpRequestException)
             {
-                return BadRequest($"Error getting movie from Themoviedb: {httpRequestException.Message}");
+                return BadRequest($"Error getting movies from Themoviedb: {httpRequestException.Message}");
             }
         }
     }

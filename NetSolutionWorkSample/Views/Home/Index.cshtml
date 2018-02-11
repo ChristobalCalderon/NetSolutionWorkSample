@@ -10,137 +10,52 @@
 
     <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
     <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+    <link href="~/css/site.css" rel="stylesheet" />
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
-
-    <style>
-        input[type=text] {
-            width: 130px;
-            box-sizing: border-box;
-            border: 2px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-            background-color: white;
-            background-image: url('searchicon.png');
-            background-position: 10px 10px;
-            background-repeat: no-repeat;
-            padding: 12px 20px 12px 40px;
-            -webkit-transition: width 0.4s ease-in-out;
-            transition: width 0.4s ease-in-out;
-        }
-
-            input[type=text]:focus {
-                width: 100%;
-            }
-    </style>
+    <script type="text/javascript" src="~/js/site.js"></script>
 
 </head>
 <body>
     <div style="width: 50%; padding-top: 50px; margin-left:  auto; margin-right:  auto;">
-        <div>
-            <input type="text" id="movieInput" onkeyup="movieSearch()" placeholder="Search for movie name.." title="Type in movie title">
+
+        <div class="tab">
+            <button class="tablinks" onclick="openMovies(event, 'TopRated')">Top rated</button>
+            <button class="tablinks" onclick="openMovies(event, 'Popular')">Popular</button>
+            <button class="tablinks" onclick="openMovies(event, 'Upcoming')">Upcoming</button>
+            <button class="tablinks" onclick="openMovies(event, 'FreeSearch')">Free search</button>
         </div>
 
-        <div style="padding: 10px;margin: 10px 0;background: #fcfcfc;border: 1px solid #e9e9e9;display: inline-block;">
+        <div id="TopRated" class="tabcontent">
+            <h3>Top rated</h3>
+            <p>The top rated movies on TMDb.</p>
+        </div>
+
+        <div id="Popular" class="tabcontent">
+            <h3>Popular</h3>
+            <p>A list of the current popular movies on TMDb.</p>
+        </div>
+
+        <div id="Upcoming" class="tabcontent">
+            <h3>Upcoming</h3>
+            <p>A list of upcoming movies in theatres</p>
+        </div>
+
+        <div id="FreeSearch" class="tabcontent">
+            <h3>Free search</h3>
+            <p>Movies or movie that match the name will appear</p>
+            <div>
+                <input type="text" id="movieInput" placeholder="Search for movie name.." title="Type in movie title">
+            </div>
+        </div>
+        <div id ="pagerWrapper" style="padding: 10px;margin: 10px 0;background: #fcfcfc;border: 1px solid #e9e9e9;display: inline-block;">
             <label>
                 Page:
-                <select id="pager">
- 
-                </select>
+                <select id="pager"></select>
             </label>
         </div>
+
         <div id="jsGrid"></div>
-        <script>
-
-            $("#jsGrid").jsGrid({
-                width: "100%",
-                height: "800px",
-
-                inserting: false,
-                editing: false,
-                sorting: true,
-
-                rowClick: function (args) {
-                    showDetailsDialog("Edit", args.item);
-                },
-
-                fields: [
-                    { name: "ID", type: "number", width: 150, validate: "required" },
-                    { name: "Title", type: "text", width: 50 },
-                    { name: "Overview", type: "text", width: 200 },
-                    { type: "control" }
-                ]
-            });
-
-            var onPageSelect = function () {
-                var pageNr = parseInt($("#pager").val(), 10);
-
-                $.ajax({
-                    url: "/Home/TopRatedMovies",
-                    type: "POST",
-                    data: {
-                        page: pageNr
-                    }
-                }).done(function (data) {
-                    var db = [];
-
-                    $(data.results).each(function (index) {
-                        db.push({
-                            "ID": data.results[index].id,
-                            "Title": data.results[index].title,
-                            "Overview": data.results[index].overview
-                        });
-                    });
-
-                    $("#jsGrid").jsGrid({
-                        data: db
-                    });
-                });
-            };
-
-            $("#pager").on("change", onPageSelect);
-
-            $(function () {
-                var s = $("#pager");
-
-                for (var i = 1; i <= 1000; i++) {
-                   $("<option />", { value: i, text: i }).appendTo(s);
-                }
-                
-                $(s).wrap('<table><tr><td></td></tr></table>');
-            });
-
-            //Call it once ---WRONG why to implement this
-            onPageSelect();
-
-            function movieSearch() {
-                var input = $("#movieInput").val()
-
-                $.ajax({
-                    url: "/Home/SearchMovieByName",
-                    type: "POST",
-                    data: {
-                        searchName: input
-                    }
-                }).done(function (data) {
-                    var db = [];
-
-                    $(data.results).each(function (index) {
-                        db.push({
-                            "ID": data.results[index].id,
-                            "Title": data.results[index].title,
-                            "Overview": data.results[index].overview
-                        });
-                    });
-
-                    $("#jsGrid").jsGrid({
-                        data: db
-                    });
-                });
-            };
-
-
-        </script>
     </div>
 </body>
 </html>

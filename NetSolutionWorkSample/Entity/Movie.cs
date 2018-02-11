@@ -9,6 +9,8 @@ namespace NetSolutionWorkSample.Entity
     {
         public const string Base_Uri = "https://api.themoviedb.org";
         public const string TopRated_Uri = "/3/movie/top_rated?api_key=717ee0dbdfafcfa5db97d570bcaa6a6c&language=en-US&page=";
+        public const string Popular_Uri = "/3/movie/popular?api_key=717ee0dbdfafcfa5db97d570bcaa6a6c&language=en-US&page=";
+        public const string Upcoming_Uri = "/3/movie/upcoming?api_key=717ee0dbdfafcfa5db97d570bcaa6a6c&language=en-US&page=1";
         //public int Vote_Count { get; set; }
         public int ID { get; set; }
         //public bool Video { get; set; }
