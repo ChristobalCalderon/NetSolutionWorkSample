@@ -13,11 +13,9 @@
     <link href="~/css/site.css" rel="stylesheet" />
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
-    <script type="text/javascript" src="~/js/site.js"></script>
-
 </head>
 <body>
-    <div style="width: 50%; padding-top: 50px; margin-left:  auto; margin-right:  auto;">
+    <div class="wrapper">
 
         <div class="tab">
             <button class="tablinks" onclick="openMovies(event, 'TopRated')">Top rated</button>
@@ -48,7 +46,7 @@
                 <input type="text" id="movieInput" placeholder="Search for movie name.." title="Type in movie title">
             </div>
         </div>
-        <div id ="pagerWrapper" style="padding: 10px;margin: 10px 0;background: #fcfcfc;border: 1px solid #e9e9e9;display: inline-block;">
+        <div id ="pagerWrapper" class="pagerStyle">
             <label>
                 Page:
                 <select id="pager"></select>
@@ -57,5 +55,134 @@
 
         <div id="jsGrid"></div>
     </div>
+
+    <script type="text/javascript">
+        var url = "";
+
+        $(function () {
+
+            $("#jsGrid").jsGrid({
+                width: "100%",
+                height: "800px",
+
+                inserting: false,
+                editing: false,
+                sorting: true,
+
+                rowClick: function (args) {
+                    showDetailsDialog("Edit", args.item);
+                },
+
+                fields: [
+                    { name: "Title", type: "text" },
+                    { name: "Popularity", type: "number", validate: "required" },
+                    { type: "control" }
+                ]
+            });
+
+            $("#movieInput").keyup(function () {
+                var input = $("#movieInput").val()
+
+                $.ajax({
+                    url: "/Home/GetSearchQueryStringAsync",
+                    type: "POST",
+                    data: {
+                        searchName: input
+                    }
+                }).done(function (data) {
+                    var db = [];
+
+                    $(data.results).each(function (index) {
+                        db.push({
+                            "Title": data.results[index].title,
+                            "Popularity": data.results[index].popularity
+                        });
+                    });
+
+                    $("#jsGrid").jsGrid({
+                        data: db
+                    });
+                });
+            });
+
+            window.onPageSelect = function () {
+                var pageNr = parseInt($("#pager").val(), 10);
+
+                $.ajax({
+                    url: "/Home/" + url,
+                    type: "POST",
+                    data: {
+                        page: pageNr
+                    }
+                }).done(function (data) {
+                    var db = [];
+
+                    $(data.results).each(function (index) {
+                        db.push({
+                            "Title": data.results[index].title,
+                            "Popularity": data.results[index].popularity
+                        });
+                    });
+
+                    $("#jsGrid").jsGrid({
+                        data: db
+                    });
+                });
+            };
+
+            $("#pager").on("change", onPageSelect);
+
+            $(function () {
+                var s = $("#pager");
+
+                for (var i = 1; i <= 1000; i++) {
+                    $("<option />", { value: i, text: i }).appendTo(s);
+                }
+
+                $(s).wrap('<table><tr><td></td></tr></table>');
+            });
+
+            $("#pagerWrapper").hide();
+            $("#jsGrid").hide();
+
+        })
+
+        function openMovies(evt, Movies) {
+
+            $("#pagerWrapper").show();
+            $("#jsGrid").show();
+
+            switch (Movies) {
+                case "TopRated":
+                    url = "GetRatedMoviesAsync";
+                    break;
+                case "Popular":
+                    url = "GetPopularMoviesAsync";
+                    break;
+                case "Upcoming":
+                    url = "GetUpcomingMoviesAsync";
+                    break;
+                case "FreeSearch":
+                    $("#pagerWrapper").hide();
+                    break;
+            }
+
+            //Always start from page 1 when switching between tabs
+            $("#pager").val(1);
+            onPageSelect();
+
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(Movies).style.display = "block";
+            evt.currentTarget.className += " active";
+        };
+    </script>
 </body>
 </html>

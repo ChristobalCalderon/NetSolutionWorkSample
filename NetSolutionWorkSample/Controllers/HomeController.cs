@@ -10,15 +10,16 @@ using Newtonsoft.Json;
 using NetSolutionWorkSample.Entity;
 using System.Web;
 using NetSolutionWorkSample.Services;
+using NetSolutionWorkSample.Entities;
 
 namespace NetSolutionWorkSample.Controllers
 {
     public class HomeController : Controller
     {
-        ITheMovieRepository _theMovieRepository;
-        public HomeController(ITheMovieRepository theMovieRepository)
+        private readonly ITheMovieService _theMovieService;
+        public HomeController(ITheMovieService theMovieService)
         {
-            _theMovieRepository = theMovieRepository;
+            _theMovieService = theMovieService;
         }
 
         public IActionResult Index()
@@ -26,27 +27,27 @@ namespace NetSolutionWorkSample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> TopRatedMovies(int page)
+        public async Task<IActionResult> GetRatedMoviesAsync(int page)
         {
-            return await clientRepsone(_theMovieRepository.TopRatedMovies(page));
+            return await clientResponse(_theMovieService.GetRatedMoviesAsync(page));
         }
 
-        public async Task<IActionResult> PopularMovies(int page)
+        public async Task<IActionResult> GetPopularMoviesAsync(int page)
         {
-            return await clientRepsone(_theMovieRepository.PopularMovies(page));
+            return await clientResponse(_theMovieService.GetPopularMoviesAsync(page));
         }
 
-        public async Task<IActionResult> UpcomingMovies(int page)
+        public async Task<IActionResult> GetUpcomingMoviesAsync(int page)
         {
-            return await clientRepsone(_theMovieRepository.UpcomingMovies(page));
+            return await clientResponse(_theMovieService.GetUpcomingMoviesAsync(page));
         }
 
-        public async Task<IActionResult> SearchMovieByName(string searchName)
+        public async Task<IActionResult> GetSearchQueryStringAsync(string searchName)
         {
-            return await clientRepsone(_theMovieRepository.SearchMovieByName(searchName));
+            return await clientResponse(_theMovieService.GetSearchQueryStringAsync(searchName));
         }
 
-        private async Task<IActionResult> clientRepsone(Task<MoviePage> client)
+        private async Task<IActionResult> clientResponse(Task<MoviePage> client)
         {
             try
             {

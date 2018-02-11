@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NetSolutionWorkSample.Services;
+using NetSolutionWorkSample.Entities;
 
 namespace NetSolutionWorkSample
 {
@@ -24,12 +25,17 @@ namespace NetSolutionWorkSample
         {
             services.AddMvc();
 
-            services.AddScoped<ITheMovieRepository, TheMovieRepository>();
+            services.AddScoped<ITheMovieService, TheMovieService>();
+
+            services.Configure<TheMovieDBServiceSettings>(Configuration.GetSection("TheMovieDBServiceSettings"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+
+            var myConfig = Configuration["TheMovieDB"];
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

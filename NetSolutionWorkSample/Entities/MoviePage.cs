@@ -7,6 +7,6 @@ namespace NetSolutionWorkSample.Entity
 {
     public class MoviePage
     {
-        public IEnumerable<Movie> results { get; set; }
+        public IEnumerable<Movie> Results { get; set; }
     }
 }
