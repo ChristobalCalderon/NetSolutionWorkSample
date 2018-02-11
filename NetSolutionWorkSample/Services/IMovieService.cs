@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NetSolutionWorkSample.Services
 {
-    public interface ITheMovieService
+    public interface IMovieService
     {
         Task<MoviePage> GetRatedMoviesAsync(int page);
         Task<MoviePage> GetPopularMoviesAsync(int page);

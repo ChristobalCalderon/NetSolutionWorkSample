@@ -25,9 +25,9 @@ namespace NetSolutionWorkSample
         {
             services.AddMvc();
 
-            services.AddScoped<ITheMovieService, TheMovieService>();
+            services.AddScoped<IMovieService, MovieService>();
 
-            services.Configure<TheMovieDBServiceSettings>(Configuration.GetSection("TheMovieDBServiceSettings"));
+            services.Configure<MovieServiceSettings>(Configuration.GetSection("MovieServiceSettings"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,7 +41,7 @@ namespace NetSolutionWorkSample
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+
             }
 
             app.UseStaticFiles();
@@ -50,7 +50,7 @@ namespace NetSolutionWorkSample
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}");
             });
         }
     }

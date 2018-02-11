@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace NetSolutionWorkSample.Entities
 {
-    public class TheMovieDBServiceSettings
+    public class MovieServiceSettings
     {
         public string BaseUri { get; set; }
         public string TopRated_Uri { get; set; }

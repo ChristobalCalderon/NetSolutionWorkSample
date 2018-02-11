@@ -121,11 +121,8 @@
                 rowClick: function (row) {
                     console.log(row.item.ID)
                     $.ajax({
-                        url: "/Home/GetMovieAsync",
-                        type: "POST",
-                        data: {
-                            id: row.item.ID
-                        }
+                        url: "/api/movie/GetMovieAsync/" + row.item.ID,
+                        type: "GET"
                     }).done(function (data) {
 
                         $("#modal-detail").modal("show");
@@ -149,11 +146,8 @@
                 var input = $("#movieInput").val()
 
                 $.ajax({
-                    url: "/Home/GetSearchQueryStringAsync",
-                    type: "POST",
-                    data: {
-                        searchName: input
-                    }
+                    url: "/api/movie/GetSearchQueryStringAsync/" + input,
+                    type: "GET"
                 }).done(function (data) {
                     var db = [];
 
@@ -175,11 +169,8 @@
                 var pageNr = parseInt($("#pager").val(), 10);
 
                 $.ajax({
-                    url: "/Home/" + url,
-                    type: "POST",
-                    data: {
-                        page: pageNr
-                    }
+                    url: "/api/movie/" + url + "/" + pageNr,
+                    type: "GET"
                 }).done(function (data) {
                     var db = [];
 
