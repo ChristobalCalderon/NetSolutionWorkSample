@@ -136,7 +136,7 @@
                 var input = $("#movieInput").val()
 
                 $.ajax({
-                    url: "/api/movie/GetSearchQueryStringAsync/" + input,
+                    url: "/api/movie/GetMovieByNameAsync/" + input,
                     type: "GET"
                 }).done(function (data) {
                     var db = [];
