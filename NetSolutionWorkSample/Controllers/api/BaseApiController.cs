@@ -11,11 +11,11 @@ namespace NetSolutionWorkSample.Controllers.api
 {
     public class BaseApiController : Controller
     {
-        protected async Task<IActionResult> CreateResponse<T>(Task<T> client)
+        protected async Task<IActionResult> CreateResponse<T>(Task<T> action)
         {
             try
             {
-                return Ok(await client);
+                return Ok(await action);
             }
             catch (HttpRequestException httpRequestException)
             {
