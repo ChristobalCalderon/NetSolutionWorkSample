@@ -25,7 +25,7 @@ namespace NetSolutionWorkSample.Services
         {
             if(page < 1 || page > 1000)
             {
-                throw new ArgumentException(String.Format("{0} is not a valid integer, minimum 1 and maximun 1000", page), nameof(page));
+                throw new ArgumentException($"{page} is not a valid page number, minimum 1 and maximun 1000", nameof(page));
             }
 
             return await FetchMoviesAsync(composeUrl(_serviceSettings.Value.TopRated_Uri, page));
@@ -35,7 +35,7 @@ namespace NetSolutionWorkSample.Services
         {
             if (page < 1 || page > 1000)
             {
-                throw new ArgumentException(String.Format("{0} is not a valid integer, minimum 1 and maximun 1000", page), nameof(page));
+                throw new ArgumentException($"{page} is not a valid page number, minimum 1 and maximun 1000", nameof(page));
             }
 
             return await FetchMoviesAsync(composeUrl(_serviceSettings.Value.Popular_Uri, page));
@@ -45,7 +45,7 @@ namespace NetSolutionWorkSample.Services
         {
             if (page < 1 || page > 1000)
             {
-                throw new ArgumentException(String.Format("{0} is not a valid integer, minimum 1 and maximun 1000", page), nameof(page));
+                throw new ArgumentException($"{page} is not a valid page number, minimum 1 and maximun 1000", nameof(page));
             }
 
             return await FetchMoviesAsync(composeUrl(_serviceSettings.Value.Upcoming_Uri, page));
