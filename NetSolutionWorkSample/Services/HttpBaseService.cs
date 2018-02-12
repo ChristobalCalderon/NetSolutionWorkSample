@@ -16,9 +16,15 @@ namespace NetSolutionWorkSample.Services
             {
                 client.BaseAddress = new Uri(baseUri);
                 var response = await client.GetAsync(requestUri);
-                response.EnsureSuccessStatusCode();
-
-                return await response.Content.ReadAsStringAsync();
+                try
+                {
+                    response.EnsureSuccessStatusCode();
+                    return await response.Content.ReadAsStringAsync();
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Error message: " + e.Message);
+                }
             }
         }
     }

@@ -45,10 +45,10 @@ namespace NetSolutionWorkSample.Controllers.api
         }
 
         [HttpGet]
-        [Route("GetSearchQueryStringAsync/{searchName}")]
-        public async Task<IActionResult> GetSearchQueryStringAsync(string searchName)
+        [Route("GetMovieByNameAsync/{searchName}")]
+        public async Task<IActionResult> GetMovieByNameAsync(string searchName)
         {
-            return await CreateResponse(_movieService.GetSearchQueryStringAsync(searchName));
+            return await CreateResponse(_movieService.GetMovieByNameAsync(searchName));
         }
     }
 }

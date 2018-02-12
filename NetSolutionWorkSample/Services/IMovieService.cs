@@ -12,6 +12,6 @@ namespace NetSolutionWorkSample.Services
         Task<MoviePage> GetPopularMoviesAsync(int page);
         Task<MoviePage> GetUpcomingMoviesAsync(int page);
         Task<Movie> GetMovieAsync(int id);
-        Task<MoviePage> GetSearchQueryStringAsync(string searchName);   
+        Task<MoviePage> GetMovieByNameAsync(string searchName);   
     }
 }
