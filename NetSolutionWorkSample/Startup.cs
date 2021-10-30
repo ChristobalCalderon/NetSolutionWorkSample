@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NetSolutionWorkSample.Services;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using NetSolutionWorkSample.Entities;
+using NetSolutionWorkSample.Services;
 
 namespace NetSolutionWorkSample
 {
@@ -20,37 +18,64 @@ namespace NetSolutionWorkSample
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        readonly string MyAllowSpecificOrigins = "MyAllowSpecificOrigins";
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000");
+                });
+            });
+
+            services.AddControllers()
+                    .AddControllersAsServices();
 
             services.AddScoped<IMovieService, MovieService>();
 
             services.Configure<MovieServiceSettings>(Configuration.GetSection("MovieServiceSettings"));
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "API",
+                    Version = "v1"
+                });
+            });
+
+            services.AddHealthChecks();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            app.UseCors(MyAllowSpecificOrigins);
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
+                app.UseSwagger(c => c.RouteTemplate = "swagger/{documentName}/swagger.json");
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("./v1/swagger.json", "API V1");
+                    c.RoutePrefix = "swagger";
+                });
             }
             else
             {
-
+                app.UseHsts();
             }
 
             app.UseStaticFiles();
 
-            app.UseMvc(routes =>
+            app.UseRouting();
+
+            app.UseEndpoints(route =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}");
+                route.MapControllers();
             });
         }
     }
